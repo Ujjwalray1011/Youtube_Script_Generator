@@ -1,83 +1,64 @@
-/* ── ScriptNest — fully theme-adaptive styles ─────────────────────────────── */
-
-/* Hide Streamlit chrome */
+/* ── ScriptNest styles ────────────────────────────────────────────────────── */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header { visibility: hidden; }
 
-/* Remove huge default top padding */
+/* Remove huge top gap */
 .block-container {
     padding-top: 1.5rem !important;
     padding-bottom: 1rem !important;
+    max-width: 100% !important;
 }
 
-/* ── Sidebar — always visible, matches theme ── */
+/* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    min-width: 220px !important;
-    max-width: 220px !important;
+    min-width: 230px !important;
+    max-width: 230px !important;
+    display: block !important;
+    visibility: visible !important;
 }
-
 [data-testid="stSidebar"] > div:first-child {
-    padding: 24px 14px 20px 14px !important;
+    padding: 20px 14px !important;
 }
-
-/* Make sidebar collapse button always show */
+/* Force sidebar open arrow visible */
 [data-testid="collapsedControl"] {
     display: flex !important;
+    visibility: visible !important;
+}
+/* Sidebar section headers Streamlit injects */
+[data-testid="stSidebar"] hr {
+    display: none;
 }
 
-/* ── Logo ── */
-.sn-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 4px 8px;
-    margin-bottom: 32px;
-}
-.sn-logo-text {
-    font-size: 19px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    font-family: 'Inter', sans-serif;
-    line-height: 1;
-}
-.sn-logo-s1 { color: #4B35C4; }
-.sn-logo-s2 { color: #E8351A; }
-
-/* ── Sidebar nav ── */
-.sn-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
+/* ── Nav items ── */
 .sn-nav-item {
-    display: flex;
-    align-items: center;
+    display: block;
     padding: 9px 12px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     color: var(--text-color);
     opacity: 0.55;
-    cursor: pointer;
+    margin-bottom: 2px;
     font-family: 'Inter', sans-serif;
+    cursor: pointer;
     transition: opacity 0.15s, background 0.15s;
-    margin-bottom: 1px;
 }
-.sn-nav-item:hover {
-    opacity: 1;
-    background: rgba(128,128,128,0.1);
-}
+.sn-nav-item:hover { opacity: 1; background: rgba(128,128,128,0.1); }
 .sn-nav-active {
-    background: rgba(232,53,26,0.12) !important;
+    background: rgba(232,53,26,0.13) !important;
     color: #E8351A !important;
     opacity: 1 !important;
 }
 
+/* Remove the gap Streamlit adds between markdown elements in sidebar */
+[data-testid="stSidebar"] .stMarkdown { margin-bottom: 0 !important; }
+[data-testid="stSidebar"] .element-container { margin-bottom: 0 !important; }
+
 /* ── Top bar ── */
 .sn-topbar {
     padding-bottom: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     border-bottom: 1px solid rgba(128,128,128,0.2);
 }
 .sn-title {
@@ -101,19 +82,19 @@ header { visibility: hidden; }
     font-size: 15px;
     font-weight: 700;
     color: var(--text-color);
-    margin-bottom: 4px;
+    margin: 0 0 4px 0;
     font-family: 'Inter', sans-serif;
 }
 .sn-panel-sub {
     font-size: 13px;
     color: var(--text-color);
     opacity: 0.55;
-    margin-bottom: 16px;
+    margin: 0 0 14px 0;
     line-height: 1.5;
     font-family: 'Inter', sans-serif;
 }
 
-/* ── All inputs — text always visible ── */
+/* ── Inputs ── */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
     border-radius: 8px !important;
@@ -127,13 +108,12 @@ header { visibility: hidden; }
 [data-testid="stTextInput"] input::placeholder,
 [data-testid="stTextArea"] textarea::placeholder {
     color: var(--text-color) !important;
-    opacity: 0.38 !important;
+    opacity: 0.35 !important;
 }
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
     border-color: #E8351A !important;
     box-shadow: 0 0 0 3px rgba(232,53,26,0.12) !important;
-    outline: none !important;
 }
 
 /* Selectbox */
@@ -165,10 +145,10 @@ header { visibility: hidden; }
     padding: 11px 0 !important;
     font-family: 'Inter', sans-serif !important;
     width: 100% !important;
+    transition: background 0.15s, box-shadow 0.15s !important;
 }
 [data-testid="stButton"] > button[kind="primary"]:hover {
     background-color: #c92d16 !important;
-    transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(232,53,26,0.3) !important;
 }
 
@@ -184,9 +164,8 @@ header { visibility: hidden; }
     width: 100% !important;
 }
 
-/* ── Script output box ── */
+/* ── Script output ── */
 .sn-script-box {
-    background: transparent;
     border: 1px solid rgba(128,128,128,0.25);
     border-radius: 12px;
     padding: 20px 24px;
@@ -195,7 +174,7 @@ header { visibility: hidden; }
     color: var(--text-color);
     white-space: pre-wrap;
     font-family: 'Inter', sans-serif;
-    min-height: 280px;
+    min-height: 260px;
 }
 
 /* ── Empty state ── */
@@ -204,17 +183,17 @@ header { visibility: hidden; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 340px;
+    min-height: 320px;
     text-align: center;
     padding: 40px 20px;
     font-family: 'Inter', sans-serif;
 }
 .sn-empty-icon {
-    font-size: 36px;
+    font-size: 34px;
     margin-bottom: 14px;
     background: rgba(232,53,26,0.1);
-    width: 68px;
-    height: 68px;
+    width: 66px;
+    height: 66px;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -236,9 +215,6 @@ header { visibility: hidden; }
 
 /* ── Footer stats ── */
 .sn-footer-stats {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     font-size: 13px;
     color: var(--text-color);
     opacity: 0.65;
@@ -249,4 +225,3 @@ header { visibility: hidden; }
     color: var(--text-color);
     opacity: 1;
 }
-.sn-sep { opacity: 0.3; }
