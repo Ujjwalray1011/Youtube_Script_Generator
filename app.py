@@ -6,14 +6,14 @@ import base64
 # ── Page Config ─────────────────────────
 st.set_page_config(page_title="ScriptNest AI", page_icon="🎬", layout="wide")
 
-# ── Load Logo ─────────────────────────
+# ── Load Logo (FIXED) ─────────────────────────
 def get_base64_logo():
     with open("logo.png", "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 logo_base64 = get_base64_logo()
 
-# ── Custom CSS (🔥 Glass UI) ─────────────────────────
+# ── Custom CSS (🔥 Premium UI) ─────────────────────────
 st.markdown("""
 <style>
 
@@ -79,40 +79,6 @@ body {
     margin-top: 20px;
 }
 
-/* Glass Input */
-.stTextInput>div>div>input {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 14px;
-    padding: 14px;
-    color: white;
-    font-size: 15px;
-}
-
-/* Placeholder */
-.stTextInput>div>div>input::placeholder {
-    color: #94a3b8;
-}
-
-/* Focus Glow */
-.stTextInput>div>div>input:focus {
-    border: 1px solid #9333ea;
-    box-shadow: 0 0 12px rgba(147, 51, 234, 0.5);
-    outline: none;
-}
-
-/* Hover */
-.stTextInput>div>div>input:hover {
-    border: 1px solid rgba(255,255,255,0.4);
-}
-
-/* Remove label space */
-label {
-    display: none !important;
-}
-
 /* Output */
 .output-box {
     background: #020617;
@@ -172,11 +138,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Input Section ─────────────────────────
-st.markdown('<div class="card">', unsafe_allow_html=True)
+col1, col2 = st.columns([3,1])
 
-topic = st.text_input("", placeholder="🎯 Enter your video topic")
+with col1:
+    topic = st.text_input("🎯 Enter your video topic")
 
-generate = st.button("✨ Generate Script")
+with col2:
+    st.write("")
+    st.write("")
+    generate = st.button("✨ Generate Script")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -216,8 +186,9 @@ if generate:
             unsafe_allow_html=True
         )
 
-        # Analytics
+        # ── Analytics ─────────────────────────
         st.markdown("### 📊 Analytics")
+
         col1, col2 = st.columns(2)
         col1.metric("Words", len(full_script.split()))
         col2.metric("Read Time", estimate_read_time(full_script))
