@@ -1,30 +1,29 @@
-/* ── ScriptNest Global Styles — fully theme-adaptive ──────────────────────── */
+/* ── ScriptNest — fully theme-adaptive styles ─────────────────────────────── */
 
-/* Hide default Streamlit chrome */
+/* Hide Streamlit chrome */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header { visibility: hidden; }
 
-/* ── Force the entire app to use one consistent background ── */
-/* Main app wrapper */
-.stApp {
-    background-color: var(--background-color) !important;
-}
-
-/* Every white/dark box Streamlit injects */
-[data-testid="stAppViewContainer"],
-[data-testid="stAppViewBlockContainer"],
-section.main,
-section.main > div,
+/* Remove huge default top padding */
 .block-container {
-    background-color: var(--background-color) !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1rem !important;
 }
 
-/* Sidebar matches app background */
-[data-testid="stSidebar"],
-[data-testid="stSidebar"] > div {
-    background-color: var(--background-color) !important;
-    border-right: 1px solid var(--secondary-background-color);
+/* ── Sidebar — always visible, matches theme ── */
+[data-testid="stSidebar"] {
+    min-width: 220px !important;
+    max-width: 220px !important;
+}
+
+[data-testid="stSidebar"] > div:first-child {
+    padding: 24px 14px 20px 14px !important;
+}
+
+/* Make sidebar collapse button always show */
+[data-testid="collapsedControl"] {
+    display: flex !important;
 }
 
 /* ── Logo ── */
@@ -33,65 +32,73 @@ section.main > div,
     align-items: center;
     gap: 10px;
     padding: 4px 8px;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 .sn-logo-text {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 700;
     letter-spacing: -0.3px;
     font-family: 'Inter', sans-serif;
+    line-height: 1;
 }
 .sn-logo-s1 { color: #4B35C4; }
 .sn-logo-s2 { color: #E8351A; }
 
 /* ── Sidebar nav ── */
-.sn-nav { display: flex; flex-direction: column; gap: 2px; }
-
+.sn-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
 .sn-nav-item {
     display: flex;
     align-items: center;
-    padding: 8px 12px;
+    padding: 9px 12px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     color: var(--text-color);
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
-    transition: opacity 0.15s;
+    transition: opacity 0.15s, background 0.15s;
+    margin-bottom: 1px;
 }
-.sn-nav-item:hover { opacity: 1; }
+.sn-nav-item:hover {
+    opacity: 1;
+    background: rgba(128,128,128,0.1);
+}
 .sn-nav-active {
-    background: rgba(232, 53, 26, 0.12) !important;
+    background: rgba(232,53,26,0.12) !important;
     color: #E8351A !important;
     opacity: 1 !important;
 }
 
 /* ── Top bar ── */
 .sn-topbar {
-    padding-bottom: 16px;
-    margin-bottom: 8px;
+    padding-bottom: 14px;
+    margin-bottom: 12px;
     border-bottom: 1px solid rgba(128,128,128,0.2);
 }
 .sn-title {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--text-color);
     letter-spacing: -0.5px;
-    margin: 0;
+    margin: 0 0 4px 0;
     font-family: 'Inter', sans-serif;
 }
 .sn-subtitle {
     font-size: 13px;
     color: var(--text-color);
-    opacity: 0.6;
-    margin: 4px 0 0 0;
+    opacity: 0.55;
+    margin: 0;
     font-family: 'Inter', sans-serif;
 }
 
 /* ── Panel headings ── */
 .sn-panel-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-color);
     margin-bottom: 4px;
@@ -100,13 +107,13 @@ section.main > div,
 .sn-panel-sub {
     font-size: 13px;
     color: var(--text-color);
-    opacity: 0.6;
-    margin-bottom: 20px;
+    opacity: 0.55;
+    margin-bottom: 16px;
     line-height: 1.5;
     font-family: 'Inter', sans-serif;
 }
 
-/* ── Inputs — make text always visible ── */
+/* ── All inputs — text always visible ── */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
     border-radius: 8px !important;
@@ -117,25 +124,22 @@ section.main > div,
     background-color: var(--background-color) !important;
     caret-color: var(--text-color) !important;
 }
-
 [data-testid="stTextInput"] input::placeholder,
 [data-testid="stTextArea"] textarea::placeholder {
     color: var(--text-color) !important;
-    opacity: 0.4 !important;
+    opacity: 0.38 !important;
 }
-
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
     border-color: #E8351A !important;
     box-shadow: 0 0 0 3px rgba(232,53,26,0.12) !important;
+    outline: none !important;
 }
 
 /* Selectbox */
 [data-testid="stSelectbox"] > div > div {
     border-radius: 8px !important;
     border: 1px solid rgba(128,128,128,0.3) !important;
-    background-color: var(--background-color) !important;
-    color: var(--text-color) !important;
     font-size: 13px !important;
     font-family: 'Inter', sans-serif !important;
 }
@@ -158,12 +162,14 @@ section.main > div,
     border-radius: 8px !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-    padding: 10px 0 !important;
+    padding: 11px 0 !important;
     font-family: 'Inter', sans-serif !important;
-    transition: background 0.15s !important;
+    width: 100% !important;
 }
 [data-testid="stButton"] > button[kind="primary"]:hover {
     background-color: #c92d16 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(232,53,26,0.3) !important;
 }
 
 /* ── Download button ── */
@@ -173,35 +179,23 @@ section.main > div,
     font-size: 13px !important;
     font-weight: 500 !important;
     color: var(--text-color) !important;
-    background: var(--background-color) !important;
+    background: transparent !important;
     font-family: 'Inter', sans-serif !important;
-}
-[data-testid="stDownloadButton"] > button:hover {
-    opacity: 0.8 !important;
-}
-
-/* ── Free hint ── */
-.sn-free-hint {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-color);
-    opacity: 0.5;
-    margin-top: 10px;
-    font-family: 'Inter', sans-serif;
+    width: 100% !important;
 }
 
 /* ── Script output box ── */
 .sn-script-box {
-    background: var(--background-color);
+    background: transparent;
     border: 1px solid rgba(128,128,128,0.25);
     border-radius: 12px;
-    padding: 24px;
+    padding: 20px 24px;
     font-size: 14px;
-    line-height: 1.8;
+    line-height: 1.85;
     color: var(--text-color);
     white-space: pre-wrap;
     font-family: 'Inter', sans-serif;
-    min-height: 300px;
+    min-height: 280px;
 }
 
 /* ── Empty state ── */
@@ -210,45 +204,45 @@ section.main > div,
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 360px;
+    min-height: 340px;
     text-align: center;
     padding: 40px 20px;
     font-family: 'Inter', sans-serif;
 }
 .sn-empty-icon {
     font-size: 36px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     background: rgba(232,53,26,0.1);
-    width: 72px;
-    height: 72px;
+    width: 68px;
+    height: 68px;
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .sn-empty-state h3 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--text-color);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 .sn-empty-state p {
     font-size: 13px;
     line-height: 1.6;
-    max-width: 280px;
+    max-width: 260px;
     color: var(--text-color);
-    opacity: 0.6;
+    opacity: 0.55;
 }
 
 /* ── Footer stats ── */
 .sn-footer-stats {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 13px;
     color: var(--text-color);
-    opacity: 0.7;
-    margin-top: 12px;
+    opacity: 0.65;
+    margin-top: 10px;
     font-family: 'Inter', sans-serif;
 }
 .sn-footer-stats strong {
