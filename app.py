@@ -142,7 +142,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Sidebar ─────────────────────────
 with st.sidebar:
-    st.image("https://files.catbox.moe/7s3vzw.png", width=120)
+    st.image("logo.png", width=120)
     st.header("⚙️ Settings")
 
     tone = st.selectbox("Tone", ["Energetic", "Educational", "Casual", "Professional"])
