@@ -92,7 +92,6 @@ with left_col:
     )
 
     generate_btn = st.button("✨ Generate Script", use_container_width=True, type="primary")
-    st.markdown('<div class="sn-free-hint">ℹ️ &nbsp; Free Plan: 3 scripts left this month</div>', unsafe_allow_html=True)
 
 # ── RIGHT: Output ──────────────────────────────────────────────────────────────
 with right_col:
