@@ -1,11 +1,19 @@
 import streamlit as st
 from claude_handler import generate_script, estimate_read_time
 import time
+import base64
 
 # ── Page Config ─────────────────────────
 st.set_page_config(page_title="ScriptNest AI", page_icon="🎬", layout="wide")
 
-# ── Custom CSS (🔥 BRAND BASED UI) ─────────────────────────
+# ── Load Logo (FIXED) ─────────────────────────
+def get_base64_logo():
+    with open("logo.png", "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+logo_base64 = get_base64_logo()
+
+# ── Custom CSS (🔥 Premium UI) ─────────────────────────
 st.markdown("""
 <style>
 
@@ -19,26 +27,26 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    margin-bottom: 20px;
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    margin-bottom: 25px;
 }
 
 /* Logo */
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 .logo img {
-    height: 45px;
+    height: 50px;
 }
 .logo span {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: bold;
-    background: linear-gradient(90deg, #ff4d4d, #ff9966);
+    background: linear-gradient(90deg, #ff4d4d, #9333ea);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -46,7 +54,7 @@ body {
 /* Hero */
 .hero {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
     animation: fadeIn 1.2s ease-in;
 }
 .hero h1 {
@@ -58,19 +66,17 @@ body {
 }
 .hero p {
     color: #94a3b8;
+    font-size: 1.1rem;
 }
 
-/* Cards */
+/* Card */
 .card {
     background: rgba(255,255,255,0.05);
-    padding: 20px;
+    padding: 22px;
     border-radius: 16px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.1);
-    transition: 0.3s;
-}
-.card:hover {
-    transform: translateY(-5px);
+    margin-top: 20px;
 }
 
 /* Output */
@@ -98,6 +104,11 @@ body {
     transform: scale(1.05);
 }
 
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: #020617;
+}
+
 /* Animation */
 @keyframes fadeIn {
     from {opacity: 0; transform: translateY(-20px);}
@@ -107,18 +118,18 @@ body {
 </style>
 """, unsafe_allow_html=True)
 
-# ── Navbar with Logo ─────────────────────────
+# ── Navbar ─────────────────────────
 st.markdown(f"""
 <div class="navbar">
     <div class="logo">
-        <img src="https://files.catbox.moe/7s3vzw.png">
+        <img src="data:image/png;base64,{logo_base64}">
         <span>ScriptNest</span>
     </div>
     <div style="color:#94a3b8;">AI Script Generator ⚡</div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── Hero Section ─────────────────────────
+# ── Hero ─────────────────────────
 st.markdown("""
 <div class="hero">
 <h1>Create Viral YouTube Scripts 🚀</h1>
@@ -136,13 +147,14 @@ with col1:
 
 with col2:
     st.write("")
+    st.write("")
     generate = st.button("✨ Generate Script")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Sidebar ─────────────────────────
 with st.sidebar:
-    st.image("logo.png", width=120)
+    st.image("logo.png", use_container_width=True)
     st.header("⚙️ Settings")
 
     tone = st.selectbox("Tone", ["Energetic", "Educational", "Casual", "Professional"])
@@ -176,12 +188,14 @@ if generate:
             unsafe_allow_html=True
         )
 
-        # Stats
+        # ── Analytics ─────────────────────────
         st.markdown("### 📊 Analytics")
+
         col1, col2 = st.columns(2)
         col1.metric("Words", len(full_script.split()))
         col2.metric("Read Time", estimate_read_time(full_script))
 
+        # Download
         st.download_button("📥 Download Script", full_script)
 
 else:
