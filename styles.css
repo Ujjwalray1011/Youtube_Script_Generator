@@ -1,23 +1,33 @@
-/* ── ScriptNest Global Styles ─────────────────────────────────────────────── */
+/* ── ScriptNest Global Styles — fully theme-adaptive ──────────────────────── */
 
-/* Hide default Streamlit header/footer */
+/* Hide default Streamlit chrome */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header { visibility: hidden; }
 
-/* Sidebar */
-[data-testid="stSidebar"] {
-    background-color: #ffffff !important;
-    border-right: 1px solid #E5E7EB;
-    min-width: 220px !important;
-    max-width: 220px !important;
+/* ── Force the entire app to use one consistent background ── */
+/* Main app wrapper */
+.stApp {
+    background-color: var(--background-color) !important;
 }
 
-[data-testid="stSidebar"] > div:first-child {
-    padding: 20px 12px;
+/* Every white/dark box Streamlit injects */
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewBlockContainer"],
+section.main,
+section.main > div,
+.block-container {
+    background-color: var(--background-color) !important;
 }
 
-/* Logo */
+/* Sidebar matches app background */
+[data-testid="stSidebar"],
+[data-testid="stSidebar"] > div {
+    background-color: var(--background-color) !important;
+    border-right: 1px solid var(--secondary-background-color);
+}
+
+/* ── Logo ── */
 .sn-logo {
     display: flex;
     align-items: center;
@@ -25,18 +35,16 @@ header { visibility: hidden; }
     padding: 4px 8px;
     margin-bottom: 28px;
 }
-
 .sn-logo-text {
     font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.3px;
     font-family: 'Inter', sans-serif;
 }
-
-.sn-logo-s1 { color: #2D1B8E; }
+.sn-logo-s1 { color: #4B35C4; }
 .sn-logo-s2 { color: #E8351A; }
 
-/* Nav */
+/* ── Sidebar nav ── */
 .sn-nav { display: flex; flex-direction: column; gap: 2px; }
 
 .sn-nav-item {
@@ -46,85 +54,106 @@ header { visibility: hidden; }
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
-    color: #6B7280;
+    color: var(--text-color);
+    opacity: 0.6;
     cursor: pointer;
-    transition: all 0.15s;
     font-family: 'Inter', sans-serif;
+    transition: opacity 0.15s;
 }
-
-.sn-nav-item:hover {
-    background: #F9FAFB;
-    color: #111827;
-}
-
+.sn-nav-item:hover { opacity: 1; }
 .sn-nav-active {
-    background: #FEF2F2 !important;
+    background: rgba(232, 53, 26, 0.12) !important;
     color: #E8351A !important;
+    opacity: 1 !important;
 }
 
-/* Top bar */
+/* ── Top bar ── */
 .sn-topbar {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
     padding-bottom: 16px;
     margin-bottom: 8px;
-    border-bottom: 1px solid #E5E7EB;
+    border-bottom: 1px solid rgba(128,128,128,0.2);
 }
-
 .sn-title {
     font-size: 24px;
     font-weight: 700;
-    color: #111827;
+    color: var(--text-color);
     letter-spacing: -0.5px;
     margin: 0;
     font-family: 'Inter', sans-serif;
 }
-
 .sn-subtitle {
     font-size: 13px;
-    color: #6B7280;
+    color: var(--text-color);
+    opacity: 0.6;
     margin: 4px 0 0 0;
     font-family: 'Inter', sans-serif;
 }
 
-/* Panel titles */
+/* ── Panel headings ── */
 .sn-panel-title {
     font-size: 16px;
     font-weight: 700;
-    color: #111827;
+    color: var(--text-color);
     margin-bottom: 4px;
     font-family: 'Inter', sans-serif;
 }
-
 .sn-panel-sub {
     font-size: 13px;
-    color: #6B7280;
+    color: var(--text-color);
+    opacity: 0.6;
     margin-bottom: 20px;
     line-height: 1.5;
     font-family: 'Inter', sans-serif;
 }
 
-/* Inputs */
+/* ── Inputs — make text always visible ── */
 [data-testid="stTextInput"] input,
-[data-testid="stTextArea"] textarea,
-[data-testid="stSelectbox"] select {
+[data-testid="stTextArea"] textarea {
     border-radius: 8px !important;
-    border: 1px solid #E5E7EB !important;
+    border: 1px solid rgba(128,128,128,0.3) !important;
     font-size: 13px !important;
     font-family: 'Inter', sans-serif !important;
-    color: #111827 !important;
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
+    caret-color: var(--text-color) !important;
+}
+
+[data-testid="stTextInput"] input::placeholder,
+[data-testid="stTextArea"] textarea::placeholder {
+    color: var(--text-color) !important;
+    opacity: 0.4 !important;
 }
 
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
     border-color: #E8351A !important;
-    box-shadow: 0 0 0 3px rgba(232, 53, 26, 0.08) !important;
+    box-shadow: 0 0 0 3px rgba(232,53,26,0.12) !important;
 }
 
-/* Generate button */
+/* Selectbox */
+[data-testid="stSelectbox"] > div > div {
+    border-radius: 8px !important;
+    border: 1px solid rgba(128,128,128,0.3) !important;
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+    font-size: 13px !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Labels */
+[data-testid="stTextInput"] label,
+[data-testid="stTextArea"] label,
+[data-testid="stSelectbox"] label {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--text-color) !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* ── Generate button ── */
 [data-testid="stButton"] > button[kind="primary"] {
     background-color: #E8351A !important;
+    color: #ffffff !important;
     border: none !important;
     border-radius: 8px !important;
     font-size: 14px !important;
@@ -133,51 +162,49 @@ header { visibility: hidden; }
     font-family: 'Inter', sans-serif !important;
     transition: background 0.15s !important;
 }
-
 [data-testid="stButton"] > button[kind="primary"]:hover {
     background-color: #c92d16 !important;
 }
 
-/* Download button */
+/* ── Download button ── */
 [data-testid="stDownloadButton"] > button {
-    border: 1px solid #E5E7EB !important;
+    border: 1px solid rgba(128,128,128,0.3) !important;
     border-radius: 8px !important;
     font-size: 13px !important;
     font-weight: 500 !important;
-    color: #374151 !important;
-    background: #ffffff !important;
+    color: var(--text-color) !important;
+    background: var(--background-color) !important;
     font-family: 'Inter', sans-serif !important;
 }
-
 [data-testid="stDownloadButton"] > button:hover {
-    background: #F9FAFB !important;
-    border-color: #D1D5DB !important;
+    opacity: 0.8 !important;
 }
 
-/* Free hint */
+/* ── Free hint ── */
 .sn-free-hint {
     text-align: center;
     font-size: 12px;
-    color: #6B7280;
+    color: var(--text-color);
+    opacity: 0.5;
     margin-top: 10px;
     font-family: 'Inter', sans-serif;
 }
 
-/* Script output box */
+/* ── Script output box ── */
 .sn-script-box {
-    background: #ffffff;
-    border: 1px solid #E5E7EB;
+    background: var(--background-color);
+    border: 1px solid rgba(128,128,128,0.25);
     border-radius: 12px;
     padding: 24px;
     font-size: 14px;
     line-height: 1.8;
-    color: #111827;
+    color: var(--text-color);
     white-space: pre-wrap;
     font-family: 'Inter', sans-serif;
     min-height: 300px;
 }
 
-/* Empty state */
+/* ── Empty state ── */
 .sn-empty-state {
     display: flex;
     flex-direction: column;
@@ -185,15 +212,13 @@ header { visibility: hidden; }
     justify-content: center;
     min-height: 360px;
     text-align: center;
-    color: #6B7280;
     padding: 40px 20px;
     font-family: 'Inter', sans-serif;
 }
-
 .sn-empty-icon {
-    font-size: 48px;
+    font-size: 36px;
     margin-bottom: 16px;
-    background: #FEF2F2;
+    background: rgba(232,53,26,0.1);
     width: 72px;
     height: 72px;
     border-radius: 16px;
@@ -201,46 +226,33 @@ header { visibility: hidden; }
     align-items: center;
     justify-content: center;
 }
-
 .sn-empty-state h3 {
     font-size: 16px;
     font-weight: 600;
-    color: #111827;
+    color: var(--text-color);
     margin-bottom: 8px;
 }
-
 .sn-empty-state p {
     font-size: 13px;
     line-height: 1.6;
     max-width: 280px;
-    color: #6B7280;
+    color: var(--text-color);
+    opacity: 0.6;
 }
 
-/* Footer stats */
+/* ── Footer stats ── */
 .sn-footer-stats {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 13px;
-    color: #6B7280;
+    color: var(--text-color);
+    opacity: 0.7;
     margin-top: 12px;
     font-family: 'Inter', sans-serif;
 }
-
 .sn-footer-stats strong {
-    color: #111827;
+    color: var(--text-color);
+    opacity: 1;
 }
-
-.sn-sep {
-    color: #E5E7EB;
-}
-
-/* Label font overrides */
-[data-testid="stTextInput"] label,
-[data-testid="stTextArea"] label,
-[data-testid="stSelectbox"] label {
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    color: #111827 !important;
-    font-family: 'Inter', sans-serif !important;
-}
+.sn-sep { opacity: 0.3; }
