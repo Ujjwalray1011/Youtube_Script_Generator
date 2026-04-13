@@ -6,14 +6,14 @@ import base64
 # ── Page Config ─────────────────────────
 st.set_page_config(page_title="ScriptNest AI", page_icon="🎬", layout="wide")
 
-# ── Load Logo (FIXED) ─────────────────────────
+# ── Load Logo ─────────────────────────
 def get_base64_logo():
     with open("logo.png", "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 logo_base64 = get_base64_logo()
 
-# ── Custom CSS (🔥 Premium UI) ─────────────────────────
+# ── Custom CSS ─────────────────────────
 st.markdown("""
 <style>
 
@@ -55,7 +55,6 @@ body {
 .hero {
     text-align: center;
     margin-top: 10px;
-    animation: fadeIn 1.2s ease-in;
 }
 .hero h1 {
     font-size: 3rem;
@@ -66,7 +65,6 @@ body {
 }
 .hero p {
     color: #94a3b8;
-    font-size: 1.1rem;
 }
 
 /* Card */
@@ -79,6 +77,21 @@ body {
     margin-top: 20px;
 }
 
+/* Glass Input */
+.stTextInput>div>div>input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    padding: 14px;
+    color: white;
+}
+
+/* Remove label */
+label {
+    display: none !important;
+}
+
 /* Output */
 .output-box {
     background: #020617;
@@ -86,7 +99,6 @@ body {
     border-radius: 12px;
     border: 1px solid #334155;
     color: #e2e8f0;
-    font-family: monospace;
     white-space: pre-wrap;
 }
 
@@ -97,22 +109,11 @@ body {
     border-radius: 12px;
     height: 48px;
     font-weight: bold;
-    font-size: 16px;
-    transition: 0.3s;
-}
-.stButton>button:hover {
-    transform: scale(1.05);
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
     background: #020617;
-}
-
-/* Animation */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-20px);}
-    to {opacity: 1; transform: translateY(0);}
 }
 
 </style>
@@ -133,20 +134,16 @@ st.markdown(f"""
 st.markdown("""
 <div class="hero">
 <h1>Create Viral YouTube Scripts 🚀</h1>
-<p>Powered by AI • Fast • Smart • Creator-Friendly</p>
+<p>Powered by AI • Fast • Smart</p>
 </div>
 """, unsafe_allow_html=True)
 
 # ── Input Section ─────────────────────────
-col1, col2 = st.columns([3,1])
+st.markdown('<div class="card">', unsafe_allow_html=True)
 
-with col1:
-    topic = st.text_input("🎯 Enter your video topic")
+topic = st.text_input("", placeholder="🎯 Enter your video topic")
 
-with col2:
-    st.write("")
-    st.write("")
-    generate = st.button("✨ Generate Script")
+generate = st.button("✨ Generate Script")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -168,11 +165,19 @@ if generate:
         script_box = st.empty()
         full_script = ""
 
+        # 🔥 AUTO LANGUAGE DETECTION
+        if "hindi" in topic.lower():
+            language_instruction = "Write the script in Hindi (Devanagari script)."
+        else:
+            language_instruction = "Write the script in English."
+
         with st.spinner("🔥 AI is creating magic..."):
             for chunk in generate_script(
-                topic, tone, duration,
+                topic,
+                tone,
+                duration,
                 audience or "general audience",
-                extra
+                extra + "\n" + language_instruction
             ):
                 full_script += chunk
                 script_box.markdown(
@@ -186,14 +191,12 @@ if generate:
             unsafe_allow_html=True
         )
 
-        # ── Analytics ─────────────────────────
+        # Analytics
         st.markdown("### 📊 Analytics")
-
         col1, col2 = st.columns(2)
         col1.metric("Words", len(full_script.split()))
         col2.metric("Read Time", estimate_read_time(full_script))
 
-        # Download
         st.download_button("📥 Download Script", full_script)
 
 else:
