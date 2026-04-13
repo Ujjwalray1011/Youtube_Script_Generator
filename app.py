@@ -138,8 +138,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Input Section ─────────────────────────
-st.markdown('<div class="card">', unsafe_allow_html=True)
-
 col1, col2 = st.columns([3,1])
 
 with col1:
