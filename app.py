@@ -9,13 +9,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Custom CSS (ScriptNest UI) ─────────────────────────────────────────────────
+# ── Custom CSS ─────────────────────────────────────────────────────────────────
 with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    # Logo
     st.markdown("""
     <div class="sn-logo">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
@@ -26,23 +25,20 @@ with st.sidebar:
         </svg>
         <span class="sn-logo-text"><span class="sn-logo-s1">Script</span><span class="sn-logo-s2">Nest</span></span>
     </div>
+    <div class="sn-nav">
+        <div class="sn-nav-item sn-nav-active">&#127968;&nbsp; Generator</div>
+        <div class="sn-nav-item">&#128336;&nbsp; History</div>
+        <div class="sn-nav-item">&#128196;&nbsp; Saved Scripts</div>
+        <div class="sn-nav-item">&#128203;&nbsp; Templates</div>
+        <div class="sn-nav-item">&#10067;&nbsp; Help</div>
+    </div>
     """, unsafe_allow_html=True)
-
-    st.markdown('<div class="sn-nav">', unsafe_allow_html=True)
-    st.markdown('<div class="sn-nav-item sn-nav-active">🏠 &nbsp; Generator</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sn-nav-item">🕐 &nbsp; History</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sn-nav-item">📄 &nbsp; Saved Scripts</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sn-nav-item">📋 &nbsp; Templates</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sn-nav-item">❓ &nbsp; Help</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Header ─────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="sn-topbar">
-    <div>
-        <h1 class="sn-title">YouTube Script Generator</h1>
-        <p class="sn-subtitle">Create engaging, well-structured scripts for your YouTube videos in seconds</p>
-    </div>
+    <h1 class="sn-title">YouTube Script Generator</h1>
+    <p class="sn-subtitle">Create engaging, well-structured scripts for your YouTube videos in seconds</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -58,7 +54,6 @@ with left_col:
         "Video Topic *",
         placeholder="e.g., How to Stay Productive While Working From Home",
         max_chars=100,
-        help="Required"
     )
 
     audience = st.text_input(
@@ -125,19 +120,17 @@ with right_col:
                 unsafe_allow_html=True
             )
 
-            # ── Stats ──────────────────────────────────────────────────────────
             st.divider()
             word_count = len(full_script.split())
             speak_time = estimate_read_time(full_script)
             st.markdown(f"""
             <div class="sn-footer-stats">
                 <span>Total Length: <strong>{speak_time}</strong></span>
-                <span class="sn-sep">|</span>
+                <span class="sn-sep">&nbsp;|&nbsp;</span>
                 <span>Word Count: <strong>~{word_count:,}</strong></span>
             </div>
             """, unsafe_allow_html=True)
 
-            # ── Download ───────────────────────────────────────────────────────
             clean_topic = "".join(c for c in topic if c.isalnum() or c in " _-").strip()[:40]
             filename = f"script_{clean_topic.replace(' ', '_')}.txt"
             download_content = f"""ScriptNest — YouTube Script
@@ -176,7 +169,7 @@ Read time: {speak_time}
         st.markdown(f"""
         <div class="sn-footer-stats">
             <span>Total Length: <strong>{st.session_state['last_time']}</strong></span>
-            <span class="sn-sep">|</span>
+            <span class="sn-sep">&nbsp;|&nbsp;</span>
             <span>Word Count: <strong>~{st.session_state['last_words']:,}</strong></span>
         </div>
         """, unsafe_allow_html=True)
