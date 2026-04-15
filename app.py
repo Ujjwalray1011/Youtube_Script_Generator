@@ -1,206 +1,181 @@
 import streamlit as st
 from claude_handler import generate_script, estimate_read_time
-import time
-import base64
 
-# ── Page Config ─────────────────────────
-st.set_page_config(page_title="ScriptNest AI", page_icon="🎬", layout="wide")
+# ── Page config ────────────────────────────────────────────────────────────────
+st.set_page_config(
+    page_title="YouTube Script Generator",
+    page_icon="🎬",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-# ── Load Logo (FIXED) ─────────────────────────
-def get_base64_logo():
-    with open("logo.png", "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
-logo_base64 = get_base64_logo()
-
-# ── Custom CSS (🔥 Premium UI) ─────────────────────────
+# ── Custom CSS ─────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-
-/* Background */
-body {
-    background: linear-gradient(135deg, #020617, #0f172a);
-}
-
-/* Navbar */
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 24px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    border-radius: 14px;
-    margin-bottom: 25px;
-}
-
-/* Logo */
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.logo img {
-    height: 50px;
-}
-.logo span {
-    font-size: 1.6rem;
-    font-weight: bold;
-    background: linear-gradient(90deg, #ff4d4d, #9333ea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Hero */
-.hero {
-    text-align: center;
-    margin-top: 10px;
-    animation: fadeIn 1.2s ease-in;
-}
-.hero h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(90deg, #ff4d4d, #9333ea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.hero p {
-    color: #94a3b8;
-    font-size: 1.1rem;
-}
-
-/* Card */
-.card {
-    background: rgba(255,255,255,0.05);
-    padding: 22px;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    margin-top: 20px;
-}
-
-/* Output */
-.output-box {
-    background: #020617;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #334155;
-    color: #e2e8f0;
-    font-family: monospace;
-    white-space: pre-wrap;
-}
-
-/* Button */
-.stButton>button {
-    background: linear-gradient(90deg, #ff4d4d, #9333ea);
-    color: white;
-    border-radius: 12px;
-    height: 48px;
-    font-weight: bold;
-    font-size: 16px;
-    transition: 0.3s;
-}
-.stButton>button:hover {
-    transform: scale(1.05);
-}
-
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background: #020617;
-}
-
-/* Animation */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-20px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
+    .main-title {
+        font-size: 2.4rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FF0000, #FF6B6B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .subtitle {
+        color: #888;
+        font-size: 1rem;
+        margin-top: -10px;
+        margin-bottom: 24px;
+    }
+    .stat-box {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 12px 20px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+    }
+    .script-output {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        border-radius: 12px;
+        padding: 24px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.92rem;
+        line-height: 1.7;
+        white-space: pre-wrap;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Navbar ─────────────────────────
-st.markdown(f"""
-<div class="navbar">
-    <div class="logo">
-        <img src="data:image/png;base64,{logo_base64}">
-        <span>ScriptNest</span>
-    </div>
-    <div style="color:#94a3b8;">AI Script Generator ⚡</div>
-</div>
-""", unsafe_allow_html=True)
+# ── Header ─────────────────────────────────────────────────────────────────────
+st.markdown('<p class="main-title">🎬 YouTube Script Generator</p>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Powered by Groq AI (Free ⚡) · Generate engaging scripts in seconds</p>', unsafe_allow_html=True)
 
-# ── Hero ─────────────────────────
-st.markdown("""
-<div class="hero">
-<h1>Create Viral YouTube Scripts 🚀</h1>
-<p>Powered by AI • Fast • Smart • Creator-Friendly</p>
-</div>
-""", unsafe_allow_html=True)
-
-# ── Input Section ─────────────────────────
-col1, col2 = st.columns([3,1])
-
-with col1:
-    topic = st.text_input("🎯 Enter your video topic")
-
-with col2:
-    st.write("")
-    st.write("")
-    generate = st.button("✨ Generate Script")
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# ── Sidebar ─────────────────────────
+# ── Sidebar ─────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.image("logo.png", use_container_width=True)
-    st.header("⚙️ Settings")
+    st.header("⚙️ Script Settings")
 
-    tone = st.selectbox("Tone", ["Energetic", "Educational", "Casual", "Professional"])
-    duration = st.selectbox("Length", ["Short", "Medium", "Long"])
-    audience = st.text_input("Audience")
-    extra = st.text_area("Extra Instructions")
+    tone = st.selectbox(
+        "Tone / Style",
+        ["Energetic & Enthusiastic", "Educational & Informative",
+         "Conversational & Casual", "Professional & Formal",
+         "Humorous & Entertaining", "Inspirational & Motivational"],
+        help="The overall vibe of your script"
+    )
 
-# ── Generate Script ─────────────────────────
-if generate:
-    if not topic:
-        st.warning("⚠️ Enter topic first")
+    duration = st.selectbox(
+        "Video Length",
+        ["Short (3-5 min)", "Medium (8-12 min)", "Long (15-20 min)"],
+        index=1,
+    )
+
+    audience = st.text_input(
+        "Target Audience",
+        placeholder="e.g. beginners in Python, fitness enthusiasts",
+        help="Who is this video for?"
+    )
+
+    extra = st.text_area(
+        "Additional Instructions (optional)",
+        placeholder="e.g. Include 3 real-life examples, avoid jargon, mention a product review...",
+        height=100,
+    )
+
+    st.divider()
+    st.caption("💡 Tip: Be specific with your topic for better results!")
+    st.caption("📌 Scripts are streamed in real-time.")
+
+# ── Main content ───────────────────────────────────────────────────────────────
+col1, col2 = st.columns([3, 1])
+with col1:
+    topic = st.text_input(
+        "🎯 Video Topic",
+        placeholder="e.g. 10 Python tips every beginner should know",
+        label_visibility="visible",
+    )
+with col2:
+    st.write("")  # spacing
+    st.write("")
+    generate_btn = st.button("✨ Generate Script", use_container_width=True, type="primary")
+
+st.divider()
+
+# ── Generation ─────────────────────────────────────────────────────────────────
+if generate_btn:
+    if not topic.strip():
+        st.warning("⚠️ Please enter a video topic first.")
     else:
-        script_box = st.empty()
+        st.subheader("📝 Your Script")
+
+        # Streaming placeholder
+        script_placeholder = st.empty()
         full_script = ""
 
-        # 🔥 AUTO LANGUAGE DETECTION (ONLY ADDITION)
-        if "hindi" in topic.lower():
-            language_instruction = "Write the script in Hindi (Devanagari script)."
-        else:
-            language_instruction = "Write the script in English."
-
-        with st.spinner("🔥 AI is creating magic..."):
+        with st.spinner("Claude is writing your script..."):
             for chunk in generate_script(
-                topic, tone, duration,
-                audience or "general audience",
-                extra + "\n" + language_instruction
+                topic=topic,
+                tone=tone,
+                duration=duration,
+                audience=audience if audience else "general YouTube viewers",
+                extra=extra,
             ):
                 full_script += chunk
-                script_box.markdown(
-                    f'<div class="output-box">{full_script}▌</div>',
-                    unsafe_allow_html=True
-                )
-                time.sleep(0.01)
+                script_placeholder.markdown(full_script + "▌")
 
-        script_box.markdown(
-            f'<div class="output-box">{full_script}</div>',
-            unsafe_allow_html=True
+        # Final render (remove cursor)
+        script_placeholder.markdown(full_script)
+
+        # ── Stats ──────────────────────────────────────────────────────────────
+        st.divider()
+        c1, c2, c3 = st.columns(3)
+        word_count = len(full_script.split())
+        with c1:
+            st.metric("📄 Word count", f"{word_count:,}")
+        with c2:
+            st.metric("🎙️ Est. speak time", estimate_read_time(full_script))
+        with c3:
+            st.metric("🎯 Tone", tone.split(" ")[0])
+
+        # ── Download ───────────────────────────────────────────────────────────
+        st.divider()
+        clean_topic = "".join(c for c in topic if c.isalnum() or c in " _-").strip()[:40]
+        filename = f"script_{clean_topic.replace(' ', '_')}.txt"
+
+        download_content = f"""YouTube Script
+==============
+Topic    : {topic}
+Tone     : {tone}
+Duration : {duration}
+Audience : {audience or "General viewers"}
+Words    : {word_count}
+Read time: {estimate_read_time(full_script)}
+
+{"=" * 60}
+
+{full_script}
+"""
+        st.download_button(
+            label="⬇️ Download Script (.txt)",
+            data=download_content,
+            file_name=filename,
+            mime="text/plain",
+            use_container_width=True,
         )
 
-        # ── Analytics ─────────────────────────
-        st.markdown("### 📊 Analytics")
+        # Save to session state for re-display
+        st.session_state["last_script"] = full_script
+        st.session_state["last_topic"] = topic
 
-        col1, col2 = st.columns(2)
-        col1.metric("Words", len(full_script.split()))
-        col2.metric("Read Time", estimate_read_time(full_script))
-
-        # Download
-        st.download_button("📥 Download Script", full_script)
+# ── Show previous script if page reloads ──────────────────────────────────────
+elif "last_script" in st.session_state and not generate_btn:
+    st.info(f"📌 Previously generated script for: **{st.session_state['last_topic']}**")
+    st.markdown(st.session_state["last_script"])
 
 else:
-    st.info("👆 Enter topic to generate script")
+    # Empty state
+    st.markdown("""
+    <div style="text-align:center; padding: 60px 0; color: #aaa;">
+        <div style="font-size: 3rem">🎬</div>
+        <p style="font-size: 1.1rem; margin-top: 12px;">Enter a topic and hit <strong>Generate Script</strong> to get started</p>
+        <p style="font-size: 0.9rem;">Your script will stream here in real-time</p>
+    </div>
+    """, unsafe_allow_html=True)
