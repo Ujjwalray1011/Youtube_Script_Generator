@@ -15,17 +15,10 @@ def get_client() -> Groq:
     return Groq(api_key=api_key)
 
 
-def generate_script(
-    topic: str,
-    tone: str,
-    duration: str,
-    audience: str,
-    extra: str,
-    language: str = "English",
-):
+def generate_script(topic: str, tone: str, duration: str, audience: str, extra: str):
     """Stream a YouTube script from Groq and yield text chunks."""
     client = get_client()
-    prompt = build_script_prompt(topic, tone, duration, audience, extra, language)
+    prompt = build_script_prompt(topic, tone, duration, audience, extra)
 
     stream = client.chat.completions.create(
         model=GROQ_MODEL,
@@ -50,7 +43,13 @@ def estimate_read_time(text: str) -> str:
     minutes = words / 130
     if minutes < 1:
         return "< 1 min"
-    total_seconds = int(minutes * 60)
-    m = total_seconds // 60
-    s = total_seconds % 60
-    return f"~{m}:{s:02d}"
+    return f"~{int(round(minutes))} min"
+
+
+def estimate_read_time(text: str) -> str:
+    """Rough speaking-speed estimate: ~130 words per minute."""
+    words = len(text.split())
+    minutes = words / 130
+    if minutes < 1:
+        return "< 1 min"
+    return f"~{int(round(minutes))} min"
